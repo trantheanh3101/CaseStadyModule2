@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class DocumentManager {
 
-    private static final String FILEDOCUMENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\Module2\\src\\CaseStady_LibraryManager\\repository\\DocumentManager.csv";
+    private static final String FILEDOCUMENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\DocumentManager.csv";
 
     public static ArrayList<Document> getAllDocuments() {
         ArrayList<Document> documents = new ArrayList<>();
@@ -43,6 +43,16 @@ public class DocumentManager {
     public void addDocumentLibrary(Document document) {
         ArrayList<Document> documents = DocumentManager.getAllDocuments();
         documents.add(document);
+        saveAllDocument(documents);
+    }
+
+    public void updateDocument(String cardCode, int quantity) {
+        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        for (Document document : documents){
+            if (document.getDocumentCode().equals(cardCode)){
+                document.setQuantity(document.getQuantity() - quantity);
+            }
+        }
         saveAllDocument(documents);
     }
 }

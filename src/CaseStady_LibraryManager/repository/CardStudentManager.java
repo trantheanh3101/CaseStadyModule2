@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class CardStudentManager {
-    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\Module2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
+    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
 
     public static ArrayList<CardStudent> getAllCardStudens() {
         ArrayList<CardStudent> cardStudents = new ArrayList<>();
@@ -40,5 +40,11 @@ public class CardStudentManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addCardStudent(CardStudent cardStudent) {
+        ArrayList<CardStudent> cardStudents = CardStudentManager.getAllCardStudens();
+        cardStudents.add(cardStudent);
+        saveAllCardStudent(cardStudents);
     }
 }

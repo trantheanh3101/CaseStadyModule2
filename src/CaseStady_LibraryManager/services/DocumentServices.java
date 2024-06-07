@@ -7,6 +7,7 @@ import CaseStady_LibraryManager.view.LibraryView;
 import java.util.ArrayList;
 
 public class DocumentServices {
+    private LibraryView libraryView;
     private DocumentManager documentManager;
 
     public DocumentServices() {
@@ -34,4 +35,17 @@ public class DocumentServices {
     }
 
 
+    public void deleteDocument(LibraryView libraryView) {
+    }
+
+    public void displayAllDocument() {
+        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        if (documents.isEmpty()) {
+            libraryView.getMessDisplay();
+        } else {
+            for (Document document : documents) {
+                System.out.println(document);
+            }
+        }
+    }
 }

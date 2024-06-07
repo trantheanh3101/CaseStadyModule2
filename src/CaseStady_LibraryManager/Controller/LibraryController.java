@@ -38,21 +38,22 @@ public class LibraryController {
                     int options = libraryView.getMenuLibraryManager();
                     switch (options){
                         case 1:
+                            cardStudentServices.addCardStudent(libraryView);
                             break;
                         case 2:
                             break;
                         case 3:
+                            documentServices.addDocument(libraryView);
                             break;
                         case 4:
+                            documentServices.deleteDocument(libraryView);
                             break;
                         case 5:
-                            documentServices.addDocument(libraryView);
                             break;
                         case 6:
                             break;
                         case 7:
-                            break;
-                        case 8:
+                            documentServices.displayAllDocument();
                             break;
                         case 0:
                             break;
