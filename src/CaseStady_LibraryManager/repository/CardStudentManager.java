@@ -16,13 +16,12 @@ public class CardStudentManager {
         try (BufferedReader br = new BufferedReader(new FileReader(FILECARDSTUDENT_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] attributes = line.split(",", 5); // Split the first 5 elements (cardCode, borrowDay, returnDay, documents, student)
+                String[] attributes = line.split(",", 5);
                 if (attributes.length == 5) {
                     String cardCode = attributes[0];
                     int borrowDay = Integer.parseInt(attributes[1]);
                     int returnDay = Integer.parseInt(attributes[2]);
 
-                    // Deserialize the documents list
                     String[] documentData = attributes[3].split(";");
                     Set<Document> documents = new HashSet<>();
                     for (String doc : documentData) {
@@ -32,7 +31,6 @@ public class CardStudentManager {
                         }
                     }
 
-                    // Deserialize the student
                     String[] studentAttributes = attributes[4].split(":");
                     Student student = new Student(studentAttributes[0], studentAttributes[1], Integer.parseInt(studentAttributes[2]), studentAttributes[3]);
 
