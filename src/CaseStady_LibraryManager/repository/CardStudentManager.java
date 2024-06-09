@@ -5,22 +5,38 @@ import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.model.Student;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CardStudentManager {
-    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
+    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\Theanh36\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
 
-    public static ArrayList<CardStudent> getAllCardStudens() {
-        ArrayList<CardStudent> cardStudents = new ArrayList<>();
+    public static Set<CardStudent> getAllCardStudents() {
+        Set<CardStudent> cardStudents = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(FILECARDSTUDENT_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] attributes = line.split(",");
-                if (attributes.length == 9) {
-                    Document document = new Document(attributes[3], Integer.parseInt(attributes[4]));
-                    Student student = new Student(attributes[5], attributes[6], Integer.parseInt(attributes[7]), attributes[8]);
-                    CardStudent cardStudent = new CardStudent(attributes[0], Integer.parseInt(attributes[1]), Integer.parseInt(attributes[2]), document, student);
-                    cardStudents.add(cardStudent);
+                String[] attributes = line.split(",", 5); // Split the first 5 elements (cardCode, borrowDay, returnDay, documents, student)
+                if (attributes.length == 5) {
+                    String cardCode = attributes[0];
+                    int borrowDay = Integer.parseInt(attributes[1]);
+                    int returnDay = Integer.parseInt(attributes[2]);
+
+                    // Deserialize the documents list
+                    String[] documentData = attributes[3].split(";");
+                    Set<Document> documents = new HashSet<>();
+                    for (String doc : documentData) {
+                        String[] docAttributes = doc.split(":");
+                        if (docAttributes.length == 2) {
+                            documents.add(new Document(docAttributes[0], Integer.parseInt(docAttributes[1])));
+                        }
+                    }
+
+                    // Deserialize the student
+                    String[] studentAttributes = attributes[4].split(":");
+                    Student student = new Student(studentAttributes[0], studentAttributes[1], Integer.parseInt(studentAttributes[2]), studentAttributes[3]);
+
+                    cardStudents.add(new CardStudent(cardCode, borrowDay, returnDay, documents, student));
                 }
             }
         } catch (FileNotFoundException e) {
@@ -31,10 +47,23 @@ public class CardStudentManager {
         return cardStudents;
     }
 
-    private void saveAllCardStudent(ArrayList<CardStudent> cardStudents) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILECARDSTUDENT_PATH))){
-            for (CardStudent cardStudent : cardStudents){
-                bw.write(cardStudent.getCardCode() + "," + cardStudent.getBorrowDay() + "," + cardStudent.getReturnDay() + "," + cardStudent.getDocument() + "," + cardStudent.getStudent());
+    private void saveAllCardStudents(Set<CardStudent> cardStudents) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILECARDSTUDENT_PATH))) {
+            for (CardStudent cardStudent : cardStudents) {
+                // Serialize the documents list
+                StringBuilder documentsBuilder = new StringBuilder();
+                for (Document document : cardStudent.getDocuments()) {
+                    if (documentsBuilder.length() > 0) {
+                        documentsBuilder.append(";");
+                    }
+                    documentsBuilder.append(document.getDocumentCode()).append(":").append(document.getQuantity());
+                }
+
+                // Serialize the student
+                Student student = cardStudent.getStudent();
+                String studentData = student.getStudentID() + ":" + student.getStudentName() + ":" + student.getStudentAge() + ":" + student.getStudentClass();
+
+                bw.write(cardStudent.getCardCode() + "," + cardStudent.getBorrowDay() + "," + cardStudent.getReturnDay() + "," + documentsBuilder.toString() + "," + studentData);
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -43,8 +72,14 @@ public class CardStudentManager {
     }
 
     public void addCardStudent(CardStudent cardStudent) {
-        ArrayList<CardStudent> cardStudents = CardStudentManager.getAllCardStudens();
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
         cardStudents.add(cardStudent);
-        saveAllCardStudent(cardStudents);
+        saveAllCardStudents(cardStudents);
+    }
+
+    public void deleteCardStudent(String cardCode) {
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
+        cardStudents.removeIf(cardStudent -> cardCode.equals(cardStudent.getCardCode()));
+        saveAllCardStudents(cardStudents);
     }
 }

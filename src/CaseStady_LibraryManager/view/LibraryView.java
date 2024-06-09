@@ -4,7 +4,9 @@ import CaseStady_LibraryManager.model.CardStudent;
 import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.model.Student;
 
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class LibraryView {
     Scanner scanner = new Scanner(System.in);
@@ -70,11 +72,17 @@ public class LibraryView {
         System.out.print("Enter returnDay: ");
         int returnDay = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Enter documentCode: ");
-        String documentCode = scanner.nextLine();
-        System.out.print("Enter quantity: ");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        Document document = new Document(documentCode,quantity);
+        Set<Document> documents = new HashSet<>();
+        while (true) {
+            System.out.print("Enter documentCode (or press Enter to finish): ");
+            String documentCode = scanner.nextLine();
+            if (documentCode.isEmpty()) {
+                break;
+            }
+            System.out.print("Enter quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            documents.add(new Document(documentCode, quantity));
+        }
 
         System.out.println("Enter studentID: ");
         String studentID = scanner.nextLine();
@@ -86,10 +94,24 @@ public class LibraryView {
         String studentClass = scanner.nextLine();
         Student student = new Student(studentID,studentName,studentAge,studentClass);
 
-        return new CardStudent(cardCode,borrowDay,returnDay,document,student);
+        return new CardStudent(cardCode,borrowDay,returnDay,documents,student);
     }
 
     public void getMessDisplay() {
         System.out.println("het sach");
+    }
+
+    public void getMessgerNG() {
+        System.out.println("that bai");
+    }
+
+    public String getCardCode() {
+        System.out.println("Enter cardCode: ");
+        return scanner.nextLine();
+    }
+
+    public String getDocumentCode() {
+        System.out.println("Enter documentCode: ");
+        return scanner.nextLine();
     }
 }

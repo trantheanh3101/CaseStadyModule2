@@ -30,9 +30,7 @@ public class Document {
 
     @Override
     public String toString() {
-        return "Document{" +
-                "documentCode='" + documentCode + '\'' +
-                ", quantity=" + quantity +
-                '}';
+        return "documentCode : '" + documentCode + '\'' +
+                ", quantity : " + quantity;
     }
 }

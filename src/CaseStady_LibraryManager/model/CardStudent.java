@@ -1,20 +1,22 @@
 package CaseStady_LibraryManager.model;
 
+import java.util.Set;
+
 public class CardStudent {
     private String cardCode;
     private int borrowDay;
     private int returnDay;
-    private Document document;
+    Set<Document> documents;
     private Student student;
 
     public CardStudent() {
     }
 
-    public CardStudent(String cardCode, int borrowDay, int returnDay, Document document, Student student) {
+    public CardStudent(String cardCode, int borrowDay, int returnDay, Set<Document> documents, Student student) {
         this.cardCode = cardCode;
         this.borrowDay = borrowDay;
         this.returnDay = returnDay;
-        this.document = document;
+        this.documents = documents;
         this.student = student;
     }
 
@@ -42,12 +44,16 @@ public class CardStudent {
         this.returnDay = returnDay;
     }
 
-    public Document getDocument() {
-        return document;
+//    public Document getDocument() {
+//        return document;
+//    }
+
+    public Set<Document> getDocuments() {
+        return documents;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public Student getStudent() {
@@ -60,12 +66,9 @@ public class CardStudent {
 
     @Override
     public String toString() {
-        return "CardStudent{" +
-                "cardCode='" + cardCode + '\'' +
-                ", borrowDay=" + borrowDay +
-                ", returnDay=" + returnDay +
-                ", document=" + document +
-                ", student=" + student +
-                '}';
+        return "------CardStudent: Code: " +  cardCode + "------\n" +
+                "borrowDay: " + borrowDay + ", returnDay: " + returnDay + "\n" +
+                 documents + "\n" + student ;
+
     }
 }

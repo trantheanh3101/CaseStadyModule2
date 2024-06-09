@@ -4,7 +4,7 @@ import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.repository.DocumentManager;
 import CaseStady_LibraryManager.view.LibraryView;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public class DocumentServices {
     private LibraryView libraryView;
@@ -12,10 +12,11 @@ public class DocumentServices {
 
     public DocumentServices() {
         this.documentManager = new DocumentManager();
+        this.libraryView = new LibraryView();
     }
 
     private boolean checkCode(String documentCode) {
-        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        Set<Document> documents = DocumentManager.getAllDocuments();
         boolean exists = documents.stream().anyMatch(document -> document.getDocumentCode() == documentCode );
         if (exists) return true;
         return false;
@@ -34,12 +35,20 @@ public class DocumentServices {
         }
     }
 
-
     public void deleteDocument(LibraryView libraryView) {
+        Set<Document> documents = DocumentManager.getAllDocuments();
+        String documentCode = libraryView.getDocumentCode();
+        boolean exists = documents.stream().anyMatch(document -> document.getDocumentCode().equals(documentCode));
+        if (exists){
+            documentManager.removeDocument(documentCode);
+            libraryView.getMessgerOK();
+        } else {
+            libraryView.getMessgerNG();
+        }
     }
 
     public void displayAllDocument() {
-        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        Set<Document> documents = DocumentManager.getAllDocuments();
         if (documents.isEmpty()) {
             libraryView.getMessDisplay();
         } else {

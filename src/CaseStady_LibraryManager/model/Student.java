@@ -50,11 +50,9 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "studentID='" + studentID + '\'' +
+        return "studentID='" + studentID + '\'' +
                 ", studentName='" + studentName + '\'' +
                 ", studentAge=" + studentAge +
-                ", studentClass='" + studentClass + '\'' +
-                '}';
+                ", studentClass='" + studentClass + '\'' ;
     }
 }

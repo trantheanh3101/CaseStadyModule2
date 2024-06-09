@@ -24,8 +24,10 @@ public class LibraryController {
                     int option = libraryView.getMenuStudent();
                     switch (option) {
                         case 1:
+
                             break;
                         case 2:
+                            documentServices.displayAllDocument();
                             break;
                         case 0:
                             break;
@@ -41,6 +43,7 @@ public class LibraryController {
                             cardStudentServices.addCardStudent(libraryView);
                             break;
                         case 2:
+                            cardStudentServices.deleteCardStudent(libraryView);
                             break;
                         case 3:
                             documentServices.addDocument(libraryView);
@@ -49,8 +52,10 @@ public class LibraryController {
                             documentServices.deleteDocument(libraryView);
                             break;
                         case 5:
+                            cardStudentServices.displayAllCardStudent();
                             break;
                         case 6:
+                            cardStudentServices.SearchCardStudentByCodeCard(libraryView);
                             break;
                         case 7:
                             documentServices.displayAllDocument();

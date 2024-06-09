@@ -4,14 +4,15 @@ import CaseStady_LibraryManager.model.Document;
 
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DocumentManager {
 
-    private static final String FILEDOCUMENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\DocumentManager.csv";
+    private static final String FILEDOCUMENT_PATH = "C:\\Users\\Theanh36\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\DocumentManager.csv";
 
-    public static ArrayList<Document> getAllDocuments() {
-        ArrayList<Document> documents = new ArrayList<>();
+    public static Set<Document> getAllDocuments() {
+        Set<Document> documents = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(FILEDOCUMENT_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -29,7 +30,7 @@ public class DocumentManager {
         return documents;
     }
 
-    private void saveAllDocument(ArrayList<Document> documents) {
+    private void saveAllDocument(Set<Document> documents) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILEDOCUMENT_PATH))){
             for (Document document : documents){
                 bw.write(document.getDocumentCode() + "," + document.getQuantity());
@@ -41,18 +42,24 @@ public class DocumentManager {
     }
 
     public void addDocumentLibrary(Document document) {
-        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        Set<Document> documents = DocumentManager.getAllDocuments();
         documents.add(document);
         saveAllDocument(documents);
     }
 
     public void updateDocument(String cardCode, int quantity) {
-        ArrayList<Document> documents = DocumentManager.getAllDocuments();
+        Set<Document> documents = DocumentManager.getAllDocuments();
         for (Document document : documents){
             if (document.getDocumentCode().equals(cardCode)){
                 document.setQuantity(document.getQuantity() - quantity);
             }
         }
+        saveAllDocument(documents);
+    }
+
+    public void removeDocument(String documentCode) {
+        Set<Document> documents = DocumentManager.getAllDocuments();
+        documents.removeIf(document -> document.getDocumentCode().equals(documentCode));
         saveAllDocument(documents);
     }
 }
