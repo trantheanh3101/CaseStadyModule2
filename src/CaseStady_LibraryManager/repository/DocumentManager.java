@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DocumentManager {
 
-    private static final String FILEDOCUMENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\DocumentManager.csv";
+    private static final String FILEDOCUMENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\data\\DocumentManager.csv";
 
     public static Map<String, Document> getAllDocuments() {
         Map<String, Document> documents = new HashMap<>();

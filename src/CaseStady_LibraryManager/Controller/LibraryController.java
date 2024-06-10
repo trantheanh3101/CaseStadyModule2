@@ -2,15 +2,18 @@ package CaseStady_LibraryManager.Controller;
 
 import CaseStady_LibraryManager.services.CardStudentServices;
 import CaseStady_LibraryManager.services.DocumentServices;
+import CaseStady_LibraryManager.view.LibraryInform;
 import CaseStady_LibraryManager.view.LibraryView;
 
 public class LibraryController {
-    private CardStudentServices cardStudentServices;
-    private DocumentServices documentServices;
-    private LibraryView libraryView;
+    private final CardStudentServices cardStudentServices;
+    private final DocumentServices documentServices;
+    private final LibraryView libraryView;
+    private final LibraryInform libraryInform;
 
     public LibraryController(LibraryView libraryView) {
         this.libraryView = libraryView;
+        this.libraryInform = new LibraryInform();
         this.cardStudentServices = new CardStudentServices();
         this.documentServices = new DocumentServices();
     }
@@ -32,7 +35,7 @@ public class LibraryController {
                         case 0:
                             break;
                         default:
-                            libraryView.displayMessage();
+                            libraryInform.getInformChoice();
                             break;
                     }
                     break;
@@ -63,7 +66,7 @@ public class LibraryController {
                         case 0:
                             break;
                         default:
-                            libraryView.displayMessage();
+                            libraryInform.getInformChoice();
                             break;
                     }
                     break;
@@ -71,7 +74,7 @@ public class LibraryController {
                     run = false;
                     break;
                 default:
-                    libraryView.displayMessage();
+                    libraryInform.getInformChoice();
             }
         }
     }

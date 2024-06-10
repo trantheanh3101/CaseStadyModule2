@@ -6,19 +6,25 @@ import CaseStady_LibraryManager.repository.CardStudentManager;
 import CaseStady_LibraryManager.repository.DocumentManager;
 import CaseStady_LibraryManager.view.LibraryView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class CardStudentServices {
     private final CardStudentManager cardStudentManager;
     private final DocumentManager documentManager;
+    private final LibraryView libraryView;
 
     public CardStudentServices(){
-        cardStudentManager = new CardStudentManager();
-        documentManager = new DocumentManager();
+        this.libraryView = new LibraryView();
+        this.cardStudentManager = new CardStudentManager();
+        this.documentManager = new DocumentManager();
     }
 
     public void addCardStudent(LibraryView libraryView) {
-        CardStudent cardStudent = libraryView.getDetailCardStudent();
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
+        CardStudent cardStudent = libraryView.getDetailCardStudent(cardStudents);
         cardStudentManager.addCardStudent(cardStudent);
         for (Document document : cardStudent.getDocuments()) {
             documentManager.updateDocument(document.getDocumentCode(), document.getQuantity());
@@ -27,9 +33,14 @@ public class CardStudentServices {
     }
 
     public void displayAllCardStudent() {
-        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
-        for (CardStudent cardStudent : cardStudents) {
-            System.out.println(cardStudent);
+        List<CardStudent> cardStudents = new ArrayList<>(CardStudentManager.getAllCardStudents());
+        Collections.sort(cardStudents);
+        if (!cardStudents.isEmpty()){
+            for (CardStudent cardStudent : cardStudents) {
+                System.out.println(cardStudent);
+            }
+        } else {
+            libraryView.getMessgerOK();
         }
     }
 
@@ -48,13 +59,17 @@ public class CardStudentServices {
         Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
         String cardCode = libraryView.getCardCode();
         for (CardStudent cardStudent : cardStudents){
-            if (cardStudent.getCardCode().equals(cardCode)) {
+            if (checkCodeCard(cardCode)) {
                 System.out.println(cardStudent);
                 break;
-            }
-            else {
+            } else {
                 libraryView.getMessgerNG();
             }
         }
+    }
+
+    public boolean checkCodeCard(String cardCode) {
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
+        return cardStudents.stream().anyMatch(cardStudent -> cardStudent.getCardCode().equals(cardCode));
     }
 }

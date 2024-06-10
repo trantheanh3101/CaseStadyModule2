@@ -3,6 +3,7 @@ package CaseStady_LibraryManager.view;
 import CaseStady_LibraryManager.model.CardStudent;
 import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.model.Student;
+import CaseStady_LibraryManager.services.CardStudentServices;
 
 import java.util.HashSet;
 import java.util.Scanner;
@@ -10,11 +11,6 @@ import java.util.Set;
 
 public class LibraryView {
     Scanner scanner = new Scanner(System.in);
-
-
-    public void displayMessage() {
-        System.out.println("fill choise again!!!");
-    }
 
     public int getMenuChoice() {
         System.out.println("---------USER----------");
@@ -64,9 +60,29 @@ public class LibraryView {
         System.out.println("thanh cong");
     }
 
-    public CardStudent getDetailCardStudent() {
-        System.out.println("Enter cardCode: ");
-        String cardCode = scanner.nextLine();
+    public CardStudent getDetailCardStudent(Set<CardStudent> cardStudents) {
+        String cardCode = "";
+        boolean valid = false;
+
+        while (!valid) {
+            try {
+                System.out.print("Nhập mã thẻ: ");
+                cardCode = scanner.nextLine();
+                if (cardCode.isEmpty() || !cardCode.matches("[A-Za-z0-9]+")) {
+                    throw new IllegalArgumentException("Mã thẻ không hợp lệ. Vui lòng nhập lại.");
+                }
+                String finalCardCode = cardCode;
+                boolean exists = cardStudents.stream().anyMatch(cardStudent -> cardStudent.getCardCode().equals(finalCardCode));
+                if (exists) {
+                    throw new IllegalArgumentException("Mã thẻ đã tồn tại. Vui lòng nhập mã khác.");
+                }
+
+                valid = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
         System.out.print("Enter borrowDay: ");
         int borrowDay = Integer.parseInt(scanner.nextLine());
         System.out.print("Enter returnDay: ");
@@ -92,9 +108,9 @@ public class LibraryView {
         int studentAge = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter studentClass: ");
         String studentClass = scanner.nextLine();
-        Student student = new Student(studentID,studentName,studentAge,studentClass);
+        Student student = new Student(studentID, studentName, studentAge, studentClass);
 
-        return new CardStudent(cardCode,borrowDay,returnDay,documents,student);
+        return new CardStudent(cardCode, borrowDay, returnDay, documents, student);
     }
 
     public void getMessDisplay() {

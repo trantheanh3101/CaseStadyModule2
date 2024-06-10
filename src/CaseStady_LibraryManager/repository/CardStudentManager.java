@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CardStudentManager {
-    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
+    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\data\\CardStudentManager.csv";
 
     public static Set<CardStudent> getAllCardStudents() {
         Set<CardStudent> cardStudents = new HashSet<>();
