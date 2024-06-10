@@ -24,7 +24,7 @@ public class LibraryController {
                     int option = libraryView.getMenuStudent();
                     switch (option) {
                         case 1:
-
+                            cardStudentServices.SearchCardStudentByCodeCard(libraryView);
                             break;
                         case 2:
                             documentServices.displayAllDocument();

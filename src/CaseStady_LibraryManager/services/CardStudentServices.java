@@ -9,8 +9,8 @@ import CaseStady_LibraryManager.view.LibraryView;
 import java.util.Set;
 
 public class CardStudentServices {
-    private CardStudentManager cardStudentManager;
-    private DocumentManager documentManager;
+    private final CardStudentManager cardStudentManager;
+    private final DocumentManager documentManager;
 
     public CardStudentServices(){
         cardStudentManager = new CardStudentManager();
@@ -27,14 +27,14 @@ public class CardStudentServices {
     }
 
     public void displayAllCardStudent() {
-        Set<CardStudent> cardStudents = cardStudentManager.getAllCardStudents();
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
         for (CardStudent cardStudent : cardStudents) {
             System.out.println(cardStudent);
         }
     }
 
     public void deleteCardStudent(LibraryView libraryView) {
-        Set<CardStudent> cardStudents = cardStudentManager.getAllCardStudents();
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
         String cardCode = libraryView.getCardCode();
         boolean exists = cardStudents.stream().anyMatch(cardStudent -> cardCode.equals(cardStudent.getCardCode()));
         if (exists) {
@@ -45,14 +45,16 @@ public class CardStudentServices {
     }
 
     public void SearchCardStudentByCodeCard(LibraryView libraryView) {
-        Set<CardStudent> cardStudents = cardStudentManager.getAllCardStudents();
+        Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
         String cardCode = libraryView.getCardCode();
         for (CardStudent cardStudent : cardStudents){
-            if (cardStudent.getCardCode().equals(cardCode))
+            if (cardStudent.getCardCode().equals(cardCode)) {
                 System.out.println(cardStudent);
-            else
+                break;
+            }
+            else {
                 libraryView.getMessgerNG();
+            }
         }
     }
-
 }

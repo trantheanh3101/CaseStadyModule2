@@ -1,6 +1,6 @@
 package CaseStady_LibraryManager.model;
 
-public class Document {
+public class Document implements Comparable<Document> {
     private String documentCode;
     private int quantity;
 
@@ -26,6 +26,11 @@ public class Document {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public int compareTo(Document o) {
+        return this.documentCode.compareTo(o.documentCode);
     }
 
     @Override

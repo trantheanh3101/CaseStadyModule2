@@ -4,7 +4,7 @@ import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.repository.DocumentManager;
 import CaseStady_LibraryManager.view.LibraryView;
 
-import java.util.Set;
+import java.util.*;
 
 public class DocumentServices {
     private LibraryView libraryView;
@@ -16,16 +16,14 @@ public class DocumentServices {
     }
 
     private boolean checkCode(String documentCode) {
-        Set<Document> documents = DocumentManager.getAllDocuments();
-        boolean exists = documents.stream().anyMatch(document -> document.getDocumentCode() == documentCode );
-        if (exists) return true;
-        return false;
+        Map<String, Document> documents = DocumentManager.getAllDocuments();
+        return documents.containsKey(documentCode);
     }
 
     public void addDocument(LibraryView libraryView) {
-        while (true){
+        while (true) {
             Document document = libraryView.getDetailDocument();
-            if (!checkCode(document.getDocumentCode())){
+            if (!checkCode(document.getDocumentCode())) {
                 documentManager.addDocumentLibrary(document);
                 libraryView.getMessgerOK();
                 break;
@@ -36,10 +34,9 @@ public class DocumentServices {
     }
 
     public void deleteDocument(LibraryView libraryView) {
-        Set<Document> documents = DocumentManager.getAllDocuments();
+        Map<String, Document> documents = DocumentManager.getAllDocuments();
         String documentCode = libraryView.getDocumentCode();
-        boolean exists = documents.stream().anyMatch(document -> document.getDocumentCode().equals(documentCode));
-        if (exists){
+        if (documents.containsKey(documentCode)) {
             documentManager.removeDocument(documentCode);
             libraryView.getMessgerOK();
         } else {
@@ -48,10 +45,12 @@ public class DocumentServices {
     }
 
     public void displayAllDocument() {
-        Set<Document> documents = DocumentManager.getAllDocuments();
+        Map<String, Document> documentsMap = DocumentManager.getAllDocuments();
+        List<Document> documents = new ArrayList<>(documentsMap.values());
         if (documents.isEmpty()) {
             libraryView.getMessDisplay();
         } else {
+            Collections.sort(documents);
             for (Document document : documents) {
                 System.out.println(document);
             }

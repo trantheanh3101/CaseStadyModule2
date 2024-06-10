@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CardStudentManager {
-    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\Theanh36\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
+    private static final String FILECARDSTUDENT_PATH = "C:\\Users\\admin\\Desktop\\TheanhCode\\CaseStadyModule2\\src\\CaseStady_LibraryManager\\repository\\CardStudentManager.csv";
 
     public static Set<CardStudent> getAllCardStudents() {
         Set<CardStudent> cardStudents = new HashSet<>();
@@ -38,8 +38,10 @@ public class CardStudentManager {
                 }
             }
         } catch (FileNotFoundException e) {
-            // File not found, return empty list
+            System.out.println("FileNotFoundException roi!!!");
+            e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("IOException roi!!!");
             e.printStackTrace();
         }
         return cardStudents;
@@ -48,7 +50,6 @@ public class CardStudentManager {
     private void saveAllCardStudents(Set<CardStudent> cardStudents) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILECARDSTUDENT_PATH))) {
             for (CardStudent cardStudent : cardStudents) {
-                // Serialize the documents list
                 StringBuilder documentsBuilder = new StringBuilder();
                 for (Document document : cardStudent.getDocuments()) {
                     if (documentsBuilder.length() > 0) {
@@ -57,11 +58,10 @@ public class CardStudentManager {
                     documentsBuilder.append(document.getDocumentCode()).append(":").append(document.getQuantity());
                 }
 
-                // Serialize the student
                 Student student = cardStudent.getStudent();
                 String studentData = student.getStudentID() + ":" + student.getStudentName() + ":" + student.getStudentAge() + ":" + student.getStudentClass();
 
-                bw.write(cardStudent.getCardCode() + "," + cardStudent.getBorrowDay() + "," + cardStudent.getReturnDay() + "," + documentsBuilder.toString() + "," + studentData);
+                bw.write(cardStudent.getCardCode() + "," + cardStudent.getBorrowDay() + "," + cardStudent.getReturnDay() + "," + documentsBuilder + "," + studentData);
                 bw.newLine();
             }
         } catch (IOException e) {

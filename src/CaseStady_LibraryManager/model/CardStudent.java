@@ -2,7 +2,7 @@ package CaseStady_LibraryManager.model;
 
 import java.util.Set;
 
-public class CardStudent {
+public class CardStudent implements Comparable<CardStudent>{
     private String cardCode;
     private int borrowDay;
     private int returnDay;
@@ -65,10 +65,15 @@ public class CardStudent {
     }
 
     @Override
+    public int compareTo(CardStudent o) {
+        return this.cardCode.compareTo(o.cardCode);
+    }
+
+    @Override
     public String toString() {
         return "------CardStudent: Code: " +  cardCode + "------\n" +
                 "borrowDay: " + borrowDay + ", returnDay: " + returnDay + "\n" +
-                 documents + "\n" + student ;
+                documents + "\n" + student ;
 
     }
 }
