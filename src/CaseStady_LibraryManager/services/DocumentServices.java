@@ -24,16 +24,12 @@ public class DocumentServices {
     }
 
     public void addDocument(LibraryView libraryView) {
-        while (true) {
-            Document document = libraryView.getDetailDocument();
-            if (!checkCode(document.getDocumentCode())) {
-                documentManager.addDocumentLibrary(document);
-                libraryInform.getMessgerOK();
-                break;
-            } else {
-                libraryInform.getMessCode();
-            }
+        Map<String, Document> documents = DocumentManager.getAllDocuments();
+        Map<String,Document> documentMap = libraryView.getDetailDocument(documents);
+        for (Document document : documentMap.values()){
+            documentManager.addDocumentLibrary(document);
         }
+        libraryInform.getMessgerOK();
     }
 
     public void deleteDocument(LibraryView libraryView) {

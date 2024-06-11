@@ -3,12 +3,8 @@ package CaseStady_LibraryManager.view;
 import CaseStady_LibraryManager.model.CardStudent;
 import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.model.Student;
-import CaseStady_LibraryManager.services.CardStudentServices;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class LibraryView implements MyException{
     Scanner scanner = new Scanner(System.in);
@@ -45,13 +41,38 @@ public class LibraryView implements MyException{
         return Integer.parseInt(scanner.nextLine());
     }
 
-    public Document getDetailDocument() {
-        System.out.print("Enter documentCode: ");
-        String documentCode = scanner.nextLine();
-        System.out.print("Enter quantity: ");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        return new Document(documentCode,quantity);
+    public Map<String, Document> getDetailDocument(Map<String, Document> documentMap) {
+        Map<String, Document> documents = new HashMap<>(); // Khởi tạo biến documents
+        while (true) {
+            String documentCode = "";
+            int quantity = 0;
+            try {
+                System.out.print("Enter documentCode (nhập exit nếu đã xong): ");
+                documentCode = scanner.nextLine();
+                if (documentCode.equalsIgnoreCase("exit")) break; // Thoát vòng lặp nếu nhập "exit"
+                if (documentCode.isEmpty()) {
+                    throw new IllegalArgumentException("Không được để trống documentCode. Vui lòng nhập lại.");
+                }
+                boolean existsInMap = documentMap.containsKey(documentCode);
+                if (existsInMap) {
+                    throw new IllegalArgumentException("Mã tài liệu đã tồn tại. Vui lòng nhập mã khác.");
+                }
+
+                System.out.print("Enter quantity: ");
+                quantity = Integer.parseInt(scanner.nextLine());
+
+                // Thêm tài liệu vào map
+                documents.put(documentCode, new Document(documentCode, quantity));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Vui lòng nhập một số nguyên hợp lệ.");
+            }
+        }
+        return documents; // Trả về map chứa các tài liệu
     }
+
+
 
     public CardStudent getDetailCardStudent(Set<CardStudent> cardStudents, Map<String, Document> documentMap) {
         String cardCode = "";
@@ -106,10 +127,9 @@ public class LibraryView implements MyException{
         // Nhập returnDay
         boolean validReturnDay = false;
         while (!validReturnDay) {
-            System.out.print("Enter returnDay: ");
-            String input = scanner.nextLine();
             try {
-                returnDay = Integer.parseInt(input);
+                System.out.print("Enter returnDay: ");
+                returnDay = Integer.parseInt(scanner.nextLine());
                 if (returnDay < 1 || returnDay > 31) {
                     throw new InvalidDayException ("borrowDay phải nằm trong khoảng từ 1 đến 31.");
                 } else {
@@ -125,26 +145,26 @@ public class LibraryView implements MyException{
         // Nhập mã tài liệu và số lượng
         Set<Document> documents = new HashSet<>();
         while (true) {
-            System.out.print("Enter documentCode (or press Enter to finish): ");
-            documentCode = scanner.nextLine();
-            if (documentCode.isEmpty()) {
-                break;
-            }
-            boolean existsInMap = documentMap.containsKey(documentCode);
-            if (!existsInMap) {
-                System.out.println("Mã tài liệu không tồn tại. Vui lòng nhập mã khác.");
-                continue;
-            }
-
-            System.out.print("Enter quantity: ");
-            String input = scanner.nextLine();
             try {
-                quantity = Integer.parseInt(input);
-                documents.add(new Document(documentCode, quantity));
+                System.out.print("Enter documentCode (or press Enter to finish): ");
+                documentCode = scanner.nextLine();
+                if (documentCode.isEmpty()) {
+                    break; // Kết thúc vòng lặp nếu không có mã tài liệu được nhập
+                }
+                boolean existsInMap = documentMap.containsKey(documentCode);
+                if (!existsInMap) {
+                    throw new IllegalArgumentException("Mã tài liệu không tồn tại. Vui lòng nhập mã khác.");
+                }
+                System.out.print("Enter quantity: ");
+                quantity = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Vui lòng nhập một số nguyên hợp lệ.");
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
             }
+            documents.add(new Document(documentCode, quantity));
         }
+
 
         // Nhập thông tin sinh viên
         String studentID;
@@ -195,7 +215,6 @@ public class LibraryView implements MyException{
         Student student = new Student(studentID, studentName, studentAge, studentClass);
         return new CardStudent(cardCode, borrowDay, returnDay, documents, student);
     }
-
 
     public String getCardCode() {
             System.out.println("Enter cardCode: ");
