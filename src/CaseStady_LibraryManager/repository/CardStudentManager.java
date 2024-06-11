@@ -30,7 +30,6 @@ public class CardStudentManager {
                             documents.add(new Document(docAttributes[0], Integer.parseInt(docAttributes[1])));
                         }
                     }
-
                     String[] studentAttributes = attributes[4].split(":");
                     Student student = new Student(studentAttributes[0], studentAttributes[1], Integer.parseInt(studentAttributes[2]), studentAttributes[3]);
 

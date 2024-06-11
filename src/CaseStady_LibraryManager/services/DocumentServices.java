@@ -2,6 +2,7 @@ package CaseStady_LibraryManager.services;
 
 import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.repository.DocumentManager;
+import CaseStady_LibraryManager.view.LibraryInform;
 import CaseStady_LibraryManager.view.LibraryView;
 
 import java.util.*;
@@ -9,10 +10,12 @@ import java.util.*;
 public class DocumentServices {
     private LibraryView libraryView;
     private DocumentManager documentManager;
+    private LibraryInform libraryInform;
 
     public DocumentServices() {
         this.documentManager = new DocumentManager();
         this.libraryView = new LibraryView();
+        this.libraryInform = new LibraryInform();
     }
 
     private boolean checkCode(String documentCode) {
@@ -25,10 +28,10 @@ public class DocumentServices {
             Document document = libraryView.getDetailDocument();
             if (!checkCode(document.getDocumentCode())) {
                 documentManager.addDocumentLibrary(document);
-                libraryView.getMessgerOK();
+                libraryInform.getMessgerOK();
                 break;
             } else {
-                libraryView.getMessDocumentCode();
+                libraryInform.getMessCode();
             }
         }
     }
@@ -38,9 +41,9 @@ public class DocumentServices {
         String documentCode = libraryView.getDocumentCode();
         if (documents.containsKey(documentCode)) {
             documentManager.removeDocument(documentCode);
-            libraryView.getMessgerOK();
+            libraryInform.getMessgerOK();
         } else {
-            libraryView.getMessgerNG();
+            libraryInform.getMessgerNG();
         }
     }
 
@@ -48,7 +51,7 @@ public class DocumentServices {
         Map<String, Document> documentsMap = DocumentManager.getAllDocuments();
         List<Document> documents = new ArrayList<>(documentsMap.values());
         if (documents.isEmpty()) {
-            libraryView.getMessDisplay();
+            libraryInform.getMessDisplay();
         } else {
             Collections.sort(documents);
             for (Document document : documents) {

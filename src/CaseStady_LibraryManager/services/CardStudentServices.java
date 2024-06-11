@@ -4,32 +4,34 @@ import CaseStady_LibraryManager.model.CardStudent;
 import CaseStady_LibraryManager.model.Document;
 import CaseStady_LibraryManager.repository.CardStudentManager;
 import CaseStady_LibraryManager.repository.DocumentManager;
+import CaseStady_LibraryManager.view.LibraryInform;
 import CaseStady_LibraryManager.view.LibraryView;
+import CaseStady_LibraryManager.view.MyException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CardStudentServices {
     private final CardStudentManager cardStudentManager;
     private final DocumentManager documentManager;
     private final LibraryView libraryView;
+    private final LibraryInform libraryInform;
 
     public CardStudentServices(){
         this.libraryView = new LibraryView();
         this.cardStudentManager = new CardStudentManager();
         this.documentManager = new DocumentManager();
+        this.libraryInform = new LibraryInform();
     }
 
     public void addCardStudent(LibraryView libraryView) {
         Set<CardStudent> cardStudents = CardStudentManager.getAllCardStudents();
-        CardStudent cardStudent = libraryView.getDetailCardStudent(cardStudents);
+        Map<String,Document> documents = DocumentManager.getAllDocuments();
+        CardStudent cardStudent = libraryView.getDetailCardStudent(cardStudents,documents);
         cardStudentManager.addCardStudent(cardStudent);
         for (Document document : cardStudent.getDocuments()) {
             documentManager.updateDocument(document.getDocumentCode(), document.getQuantity());
         }
-        libraryView.getMessgerOK();
+        libraryInform.getMessgerOK();
     }
 
     public void displayAllCardStudent() {
@@ -40,7 +42,7 @@ public class CardStudentServices {
                 System.out.println(cardStudent);
             }
         } else {
-            libraryView.getMessgerOK();
+            libraryInform.getMessgerOK();
         }
     }
 
@@ -50,9 +52,9 @@ public class CardStudentServices {
         boolean exists = cardStudents.stream().anyMatch(cardStudent -> cardCode.equals(cardStudent.getCardCode()));
         if (exists) {
             cardStudentManager.deleteCardStudent(cardCode);
-            libraryView.getMessgerOK();
+            libraryInform.getMessgerOK();
         } else
-            libraryView.getMessgerNG();
+            libraryInform.getMessgerNG();
     }
 
     public void SearchCardStudentByCodeCard(LibraryView libraryView) {
@@ -63,7 +65,7 @@ public class CardStudentServices {
                 System.out.println(cardStudent);
                 break;
             } else {
-                libraryView.getMessgerNG();
+                libraryInform.getMessgerNG();
             }
         }
     }
